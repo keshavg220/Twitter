@@ -21,6 +21,7 @@ public class AnswerController {
 
     @Autowired
     private QuestionRepository questionRepository;
+    
 
     @GetMapping("/questions/{questionId}/answers")
     public List<Answer> getAnswersByQuestionId(@PathVariable Long questionId) {
