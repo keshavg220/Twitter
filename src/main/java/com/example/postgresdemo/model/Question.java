@@ -25,6 +25,7 @@ public class Question extends AuditModel {
 
     private String email;
     private String password;
+    private String photosImagePath;
     
     
     
@@ -34,8 +35,15 @@ public class Question extends AuditModel {
     @Transient
     public String getPhotosImagePath() {
         if (photos == null || id == null) return null;
-         
-        return "/user-photos/" + id + "/" + photos;
+        if (photosImagePath != null) {
+            return photosImagePath;
+        } else {
+            return "/user-photos/" + id + "/" + photos;	
+        }
+    }
+    
+    public void setPhotosImagePath(String photosImagePath) {
+        this.photosImagePath = photosImagePath;
     }
     
     public Long getId() {

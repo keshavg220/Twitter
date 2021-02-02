@@ -163,8 +163,13 @@
 	    type : "GET",
 	    success : function(result) {
 	      console.log(result);
+	      if (result.photosImagePath != null) {
+	      formData["photosImagePath"] = result.photosImagePath;
+	      formData["photos"] = result.photos;
+	      } else {
 			formData["title"] = result.title;
 			formData["description"] = result.description;
+	      }
 			
 	$.ajax({
 	    url : '/questions',
@@ -175,8 +180,6 @@
 	      console.log(result);
 	      if (result.id != undefined) {
 	      alert("tweet submitted successfully");
-	      $("#title").val('');
-	      $("#description").val('');
 	      
 	      appendTweetData(result);     
 	      }
@@ -220,8 +223,14 @@
     }
     
     function appendTweetData(result) {
+    if (result.photos != null ) {
+      var html= '<div class="card" style="width: 100%;"><div class="card-body"><img src="'+result.photosImagePath+'"  style="width: 150px; height: 150px;" ></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
+      $(".tweetsContainer").append(html);
+    
+    } else {
        var html= '<div class="card" style="width: 100%;"><div class="card-body"><h5 class="card-title">'+result.title+'</h5><p class="card-text">'+result.description+'</p></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
       $(".tweetsContainer").append(html);
+    }
       }
       
     $(function() {
