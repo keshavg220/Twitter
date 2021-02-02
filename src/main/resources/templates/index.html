@@ -58,19 +58,12 @@
 	    <textarea id="description" placeholder="Write something.." style="height:150px"></textarea>
 	
 	    <button  onclick="saveEntity();">Post the Tweet</button>
-	    
-		 <form th:action="@{/users/save}"
-		    th:object="${user}" method="post"
-		    enctype="multipart/form-data"
-		    >
 		    <div>
 		     
 		    <label>Photos: </label>
-		    <input type="file" name="image" accept="image/png, image/jpeg" />
+		    <input type="file" name="image" accept="image/png, image/jpeg" id="imageFile" />
 		     
 		    </div>
-		</form> 
-
 		
 	    <div class="tweetsContainer" style="margin-top: 20px;"></div>
 	    
@@ -99,8 +92,20 @@
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin.min.js"></script>
   <script type="text/javascript">
-	  function saveEntity() {   
-	    var formData = {
+	  function saveEntity() { 
+	    if (document.getElementById('imageFile').files.length >0) {
+	    saveFile();
+   } else {
+   saveTweetData();
+   } 
+	  
+    }
+    
+    function saveTweetData() {
+    if ( $("#title").val().trim() == ""  || $("#description").val().trim() == "" ) {
+    return alert('pls enter title and description');
+    }
+      var formData = {
     title : $("#title").val(),
     description : $("#description").val()
   }
@@ -120,8 +125,32 @@
       }
       }
          
-  });
-    }
+  })}
+    
+    function saveFile() {
+  
+        var files = document.getElementById('imageFile').files;// $('#file').files[0];// e.target.files; 
+    
+                    var data = new FormData();
+                    data.append("image", files[0]);
+                    
+                                      $.ajax({
+                        type: "POST",
+                        enctype: 'multipart/form-data',
+                        url: "/questions/save",
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        timeout: 600000,
+                        success: function (data) {
+                            alert("success")
+                        },
+                        error: function (e) {
+                            alert("ERROR : ", e);
+                        }
+                    });
+   }
 
       
     

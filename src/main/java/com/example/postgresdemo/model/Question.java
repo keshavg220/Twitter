@@ -17,8 +17,7 @@ public class Question extends AuditModel {
 
     private Long id;
 
-    @NotBlank
-    @Size(min = 3, max = 100)
+    @Size(max = 100)
     private String title;
 
     @Column(columnDefinition = "text")
@@ -27,7 +26,6 @@ public class Question extends AuditModel {
     private String email;
     private String password;
     
-    private String photosImagePath;
     
     
     @Column(nullable = true, length = 64)
@@ -38,10 +36,6 @@ public class Question extends AuditModel {
         if (photos == null || id == null) return null;
          
         return "/user-photos/" + id + "/" + photos;
-    }
-    
-    public void setPhotosImagePath(String photosImagePath) {
-    	this.photosImagePath = photosImagePath;
     }
     
     public Long getId() {

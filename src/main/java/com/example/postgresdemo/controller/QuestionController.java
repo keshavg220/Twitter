@@ -48,20 +48,24 @@ public class QuestionController {
     public Question createQuestion(@Valid @RequestBody Question question) {
         return questionRepository.save(question);
     }
-    @PostMapping("/users/save")
-    public RedirectView saveUser(Question user,
+    
+    @PostMapping("/questions/save")
+    public boolean saveUser(Question question,
             @RequestParam("image") MultipartFile multipartFile) throws IOException {
          
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        user.setPhotos(fileName);
+        question.setPhotos(fileName);
          
-        Question savedUser = questionRepository.save(user);
- 
+        Question savedUser = questionRepository.save(question);
+        System.out.println("saurabh");
+        System.out.println(savedUser);
+        System.out.println("id "+ savedUser.getId());
+
 		String uploadDir = "user-photos/" + savedUser.getId();
  
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
          
-        return new RedirectView("/users", true);
+        return true;
     }
 
     @PostMapping("/logins")
