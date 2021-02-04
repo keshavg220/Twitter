@@ -65,8 +65,10 @@
 		     
 		    </div>
 		
-	    <div class="tweetsContainer" style="margin-top: 20px;"></div>
-	    
+		<div style="width: 100%;display: flex;">
+	    <div class="tweetsContainer" style="margin-top: 20px; width: 50% ; display: inline-block;"></div>
+	    <div class="tweetsParticularEmailContainer" style="margin-top: 20px;width: 50% ; display: inline-block;"></div>
+	    </div>
 	<!-- <img th:src="@{'/user-photos/' + ${user.photos}}"/> -->
 	</div>
 
@@ -92,6 +94,17 @@
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin.min.js"></script>
   <script type="text/javascript">
+        var email = "";
+    $(function() {
+    if ( localStorage.getItem('twitter_IsLoggedIn') == "true" ||  localStorage.getItem('twitter_IsLoggedIn') == true) {
+    	email = getUrlVars()["email"];
+       	getTweets();
+    } else {
+      	  	window.open("login.html", "_self");
+   
+    }
+	});
+	
 	  function saveEntity() { 
 	    if (document.getElementById('imageFile').files.length >0) {
 	    saveFile();
@@ -107,7 +120,8 @@
     }
       var formData = {
     title : $("#title").val(),
-    description : $("#description").val()
+    description : $("#description").val(),
+    email : email
   }
   $.ajax({
     url : '/questions',
@@ -204,8 +218,8 @@
       if (result.content != undefined) {
       var contents = result.content;
       for (var i = 0; i<contents.length; i++){
-	  if(contents[i].email === null && contents[i].password === null){
-      	appendTweetData(contents[i]);
+	  if(contents[i].password === null){
+	              	appendTweetData(contents[i]);
       }
       else{
       	continue;
@@ -225,17 +239,32 @@
     function appendTweetData(result) {
     if (result.photos != null ) {
       var html= '<div class="card" style="width: 100%;"><div class="card-body"><img src="'+result.photosImagePath+'"  style="width: 150px; height: 150px;" ></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
-      $(".tweetsContainer").append(html);
+      if (result.email == email) {
+           $(".tweetsParticularEmailContainer").append(html);
+      } else {
+          $(".tweetsContainer").append(html);
+      }
     
     } else {
        var html= '<div class="card" style="width: 100%;"><div class="card-body"><h5 class="card-title">'+result.title+'</h5><p class="card-text">'+result.description+'</p></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
-      $(".tweetsContainer").append(html);
+		 console.log(result.email);
+		 if (result.email == email) {
+		           $(".tweetsParticularEmailContainer").append(html);
+		      } else {
+		          $(".tweetsContainer").append(html);
+		 }
+          }
     }
-      }
-      
-    $(function() {
-    getTweets();
-	});
+  
+	
+	function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
 
   </script>
 

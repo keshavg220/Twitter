@@ -62,8 +62,8 @@
       var contents = result.content;
       for (var i = 0; i<contents.length; i++){
       	if ($("#inputEmail").val().trim() == contents[i].email && $("#inputPassword").val().trim() == contents[i].password ) {
-  
-  	  	window.open("index.html", "_self");
+  		    localStorage.setItem('twitter_IsLoggedIn',true);
+  	  	window.open("index.html?email="+contents[i].email, "_self");
   	  	break;
   		} 
   		else if(i == contents.length - 1) {

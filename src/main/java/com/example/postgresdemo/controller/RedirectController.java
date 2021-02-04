@@ -18,12 +18,7 @@ public class RedirectController {
 	    return modelAndView;
 	}
 
-@RequestMapping("/index")
-public ModelAndView welcome () {
-    ModelAndView modelAndView = new ModelAndView();
-    modelAndView.setViewName("index");
-    return modelAndView;
-}
+
 
 @RequestMapping("/index.html")
 public ModelAndView dashboard () {
