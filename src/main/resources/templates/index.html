@@ -96,7 +96,7 @@
   <script type="text/javascript">
         var email = "";
     $(function() {
-    if ( localStorage.getItem('twitter_IsLoggedIn') == "true" ||  localStorage.getItem('twitter_IsLoggedIn') == true) {
+    if ( (localStorage.getItem('twitter_IsLoggedIn') == "true" ||  localStorage.getItem('twitter_IsLoggedIn') == true) && (getUrlVars()["email"] != undefined)) {
     	email = getUrlVars()["email"];
        	getTweets();
     } else {
@@ -109,7 +109,7 @@
 	    if (document.getElementById('imageFile').files.length >0) {
 	    saveFile();
    } else {
-   saveTweetData();
+   		saveTweetData();
    } 
 	  
     }
