@@ -7,8 +7,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "users")
-public class User extends AuditModel{
+@Table(name = "usersTable")
+public class UserDao extends AuditModel{
 	
 	@Id
     @GeneratedValue(generator = "question_generator")
@@ -19,7 +19,6 @@ public class User extends AuditModel{
     )
 
 	private Long id;
-	private String email;
     private String password;
     private String username;
 
@@ -35,12 +34,6 @@ public class User extends AuditModel{
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	public String getPassword() {
 		return password;

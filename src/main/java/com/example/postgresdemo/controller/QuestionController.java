@@ -13,6 +13,7 @@ import com.example.postgresdemo.model.JwtResponse;
 
 
 import com.example.postgresdemo.model.Question;
+import com.example.postgresdemo.model.UserDao;
 import com.example.postgresdemo.repository.AnswerRepository;
 import com.example.postgresdemo.repository.QuestionRepository;
 import com.example.postgresdemo.service.JwtUserDetailsService;
@@ -46,17 +47,6 @@ public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
-    
-    @Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	private JwtUserDetailsService userDetailsService;
-
-
 
 
     @GetMapping("/questions")
@@ -74,29 +64,6 @@ public class QuestionController {
     public Question createQuestion(@Valid @RequestBody Question question) {
         return questionRepository.save(question);
     }
-    
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
-
-		final String token = jwtTokenUtil.generateToken(userDetails);
-
-		return ResponseEntity.ok(new JwtResponse(token));
-	}
-
-	private void authenticate(String username, String password) throws Exception {
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (DisabledException e) {
-			throw new Exception("USER_DISABLED", e);
-		} catch (BadCredentialsException e) {
-			throw new Exception("INVALID_CREDENTIALS", e);
-		}
-	}
   
     
     @PostMapping("/questions/save")
