@@ -56,6 +56,25 @@ public class QuestionController {
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
+
+
+
+    @GetMapping("/questions")
+    public Page<Question> getQuestions(Pageable pageable) {
+        return questionRepository.findAll(pageable);
+    }
+    
+    @GetMapping("/questions/{questionId}")
+    public Optional<Question> getQuestionByQuestionId(@PathVariable Long questionId) {
+        return questionRepository.findById(questionId);
+    }
+
+    
+    @PostMapping("/questions")
+    public Question createQuestion(@Valid @RequestBody Question question) {
+        return questionRepository.save(question);
+    }
+    
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
@@ -78,24 +97,6 @@ public class QuestionController {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}
-
-
-    @GetMapping("/questions")
-    public Page<Question> getQuestions(Pageable pageable) {
-        return questionRepository.findAll(pageable);
-    }
-    
-    @GetMapping("/questions/{questionId}")
-    public Optional<Question> getQuestionByQuestionId(@PathVariable Long questionId) {
-        return questionRepository.findById(questionId);
-    }
-
-    
-    @PostMapping("/questions")
-    public Question createQuestion(@Valid @RequestBody Question question) {
-        return questionRepository.save(question);
-    }
-    
   
     
     @PostMapping("/questions/save")
@@ -117,10 +118,6 @@ public class QuestionController {
         return true;
     }
 
-    @PostMapping("/logins")
-    public Question createLogin(@Valid @RequestBody Question login) {
-        return questionRepository.save(login);
-    }
 
     @PutMapping("/questions/{questionId}")
     public Question updateQuestion(@PathVariable Long questionId,
