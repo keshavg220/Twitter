@@ -1,4 +1,4 @@
-package com.example.postgresdemo.model;
+package com.example.postgresdemo.config;
 
 import java.io.*;
 import java.nio.file.*;

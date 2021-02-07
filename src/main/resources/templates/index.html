@@ -180,9 +180,11 @@
 	      if (result.photosImagePath != null) {
 	      formData["photosImagePath"] = result.photosImagePath;
 	      formData["photos"] = result.photos;
+	      formData["email"] = result.email;
 	      } else {
 			formData["title"] = result.title;
 			formData["description"] = result.description;
+			formData["email"] = result.email;
 	      }
 			
 	$.ajax({
@@ -219,7 +221,7 @@
       var contents = result.content;
       for (var i = 0; i<contents.length; i++){
 	  if(contents[i].password === null){
-	              	appendTweetData(contents[i]);
+	     appendTweetData(contents[i]);
       }
       else{
       	continue;

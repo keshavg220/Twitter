@@ -1,4 +1,4 @@
-package com.example.postgresdemo.model;
+package com.example.postgresdemo.config;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
