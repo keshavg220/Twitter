@@ -126,6 +126,9 @@
   $.ajax({
     url : '/questions',
     type : "POST",
+    headers: {
+      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+    },
     data : JSON.stringify(formData),
     contentType: "application/json; charset=utf-8",
     success : function(result) {
@@ -157,6 +160,9 @@
                         contentType: false,
                         cache: false,
                         timeout: 600000,
+                        headers: {
+                          'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+                        },
                         success: function (data) {
                             alert("success")
                         },
@@ -175,6 +181,9 @@
 	$.ajax({
 	    url : '/questions/'+idVal,
 	    type : "GET",
+	    headers: {
+	      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+	    },
 	    success : function(result) {
 	      console.log(result);
 	      if (result.photosImagePath != null) {
@@ -190,6 +199,9 @@
 	$.ajax({
 	    url : '/questions',
 	    type : "POST",
+	    headers: {
+	      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+	    },
 	    data : JSON.stringify(formData),
 	    contentType: "application/json; charset=utf-8",
 	    success : function(result) {
@@ -215,6 +227,9 @@
   $.ajax({
     url : '/questions',
     type : "GET",
+    headers: {
+      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+    },
     success : function(result) {
       console.log(result);
       if (result.content != undefined) {

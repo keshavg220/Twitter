@@ -1,8 +1,13 @@
 package com.example.postgresdemo.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,6 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +32,8 @@ import com.example.postgresdemo.model.UserDao;
 import com.example.postgresdemo.repository.QuestionRepository;
 import com.example.postgresdemo.repository.UserRepository;
 import com.example.postgresdemo.service.JwtUserDetailsService;
+import org.springframework.http.MediaType;
+
 
 @RestController
 @CrossOrigin
@@ -53,6 +62,11 @@ public class UserController {
         return userRepository.save(newUser);
     }
 	
+	 @GetMapping("/loginCheck/{username}")
+	 public UserDao getLoginUserInfo(@PathVariable String username) {
+	    return userRepository.findByUsername(username);
+	 }
+
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
@@ -62,12 +76,19 @@ public class UserController {
 				.loadUserByUsername(authenticationRequest.getUsername());
 
 		final String token = jwtTokenUtil.generateToken(userDetails);
+		System.out.println("token2 "+token);
+		String token2 = "Bearer " +token;
+		HttpHeaders headers = getHeaders();
+		headers.set("Authorization", token2);
 
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 	
+	private HttpHeaders getHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		return headers;
+	}
 	
-
 	private void authenticate(String username, String password) throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

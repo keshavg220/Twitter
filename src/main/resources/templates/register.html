@@ -67,7 +67,6 @@
 	  function signUp() {   
 	    var formData = {
 	username : $("#userName").val(),    
-    email : $("#inputEmail").val(),
     password : $("#inputPassword").val()
   }
   $.ajax({
@@ -78,17 +77,32 @@
     success : function(result) {
       console.log(result);
       if (result.id != undefined) {
-      alert("Registered successfully");
-      $("#inputEmail").val('');
-      $("#inputPassword").val('');
-      $("#userName").val('');
-      $("#confirmPassword").val('');
-      window.open("index.html", "_self");
+    	  authenticateRequest(formData);
       }
       }
          
   });
     }
+	  function authenticateRequest(formData) {
+		  $.ajax({
+			    url : '/authenticate',
+			    type : "POST",
+			    data : JSON.stringify(formData),
+			    contentType: "application/json; charset=utf-8",
+			    success : function(result) {
+		  		 localStorage.setItem('jwtTokenVal',result.token);  		    
+			      console.log(result.token);
+			      alert("Registered successfully");
+			      $("#inputEmail").val('');
+			      $("#inputPassword").val('');
+			      $("#userName").val('');
+			      $("#confirmPassword").val('');
+			      window.open("index.html", "_self");
+			      }
+			         
+			  });
+			    
+	  }
     </script>
 
   <!-- Core plugin JavaScript-->

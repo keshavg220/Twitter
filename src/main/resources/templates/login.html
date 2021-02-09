@@ -37,7 +37,7 @@
               <label for="inputPassword">Password</label>
             </div>
           </div>
-          <button class="btn btn-primary" onclick="getTweets();">Login</button>
+          <button class="btn btn-primary" onclick='loginUser($("#inputEmail").val());'>Login</button>
           <a class="btn btn-primary" href="register.html">Sign Up</a>
       </div>
     </div>
@@ -52,38 +52,47 @@
 
 </body>
   <script type="text/javascript">
-   	  function getTweets() {   
+   	  function loginUser(username) {  
+  	    var formData = {
+  	    		username : $("#inputEmail").val(),    
+  	    	    password : $("#inputPassword").val()
+  	    	  }
+  	    if ( $("#inputEmail").val().trim() == "" ||  $("#inputPassword").val().trim() == "") {
+  	    	return alert("email and password cannot be blank");
+  	    }
   $.ajax({
-    url : '/questions',
+    url : '/loginCheck/'+username,
     type : "GET",
     success : function(result) {
       console.log(result);
-      if (result.content != undefined) {
-      var contents = result.content;
-      for (var i = 0; i<contents.length; i++){
-      	if ($("#inputEmail").val().trim() == contents[i].email && $("#inputPassword").val().trim() == contents[i].password ) {
-  		    localStorage.setItem('twitter_IsLoggedIn',true);  		    
-  	  	window.open("index.html?email="+contents[i].email, "_self");
-  	  	break;
-  		} 
-  		else if(i == contents.length - 1) {
-  			alert("Bad Credentials");
+      if (result != undefined) {
+			localStorage.setItem('twitter_IsLoggedIn',true);  		    
+			authenticateRequest(formData);
+      }
+		else{
+			alert("Bad Credentials");
   			$("#inputEmail").val('');
       		$("#inputPassword").val('');
-  			}
-  			
-  		else{
-  			continue;
-  		}	
-   	
-      }
-      
-      
-      }
-     
-      }
-         
+		}
+      }         
   });
     }
+   	  
+	  function authenticateRequest(formData) {
+		  $.ajax({
+			    url : '/authenticate',
+			    type : "POST",
+			    data : JSON.stringify(formData),
+			    contentType: "application/json; charset=utf-8",
+			    success : function(result) {
+		  		 localStorage.setItem('jwtTokenVal',result.token);  		    
+			      console.log(result.token);
+			      alert("Login successfully");
+			      window.open("index.html?email="+formData.username, "_self");
+			      }
+			         
+			  });
+			    
+	  }
 </script>
 </html>

@@ -1,5 +1,6 @@
 package com.example.postgresdemo.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,6 +21,8 @@ public class UserDao extends AuditModel{
 
 	private Long id;
     private String password;
+    
+    @Column(unique=true)
     private String username;
 
     

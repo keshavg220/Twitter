@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -47,14 +48,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
+	
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		// We don't need CSRF for this example
 		httpSecurity.csrf().disable()
 		// dont authenticate this particular request
-		.authorizeRequests().antMatchers("/authenticate", "/logins").permitAll().
-		// all other requests need to be authenticated
+		.authorizeRequests().antMatchers("/authenticate", "/logins", "/loginCheck/**").permitAll().
+          antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/img/**", "/icon/**","/templates/**", "/*.html", "/vendor/**", "/user-photos/**").permitAll().
 		anyRequest().authenticated().and().
 		// make sure we use stateless session; session won't be used to
 		// store user's state.
