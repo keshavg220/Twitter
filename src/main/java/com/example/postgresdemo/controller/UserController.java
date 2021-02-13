@@ -29,8 +29,10 @@ import com.example.postgresdemo.model.JwtRequest;
 import com.example.postgresdemo.model.JwtResponse;
 import com.example.postgresdemo.model.Question;
 import com.example.postgresdemo.model.UserDao;
+import com.example.postgresdemo.model.following;
 import com.example.postgresdemo.repository.QuestionRepository;
 import com.example.postgresdemo.repository.UserRepository;
+import com.example.postgresdemo.repository.followingRepository;
 import com.example.postgresdemo.service.JwtUserDetailsService;
 import org.springframework.http.MediaType;
 
@@ -41,6 +43,9 @@ public class UserController {
 	
 	@Autowired
     private UserRepository userRepository;
+	
+	@Autowired
+    private followingRepository followingRepository;
 	
     @Autowired
 	private AuthenticationManager authenticationManager;
@@ -62,10 +67,21 @@ public class UserController {
         return userRepository.save(newUser);
     }
 	
+	@GetMapping("/follow")
+    public Page<UserDao> getQuestions(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+	
 	 @GetMapping("/loginCheck/{username}")
 	 public UserDao getLoginUserInfo(@PathVariable String username) {
 	    return userRepository.findByUsername(username);
 	 }
+	 
+	 
+	 @PostMapping("/following")
+	    public following createQuestion(@Valid @RequestBody following follow) {
+	        return followingRepository.save(follow);
+	    }
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {

@@ -68,6 +68,28 @@
 		<div style="width: 100%;display: flex;">
 	    <div class="tweetsContainer" style="margin-top: 20px; width: 50% ; display: inline-block;"></div>
 	    <div class="tweetsParticularEmailContainer" style="margin-top: 20px;width: 50% ; display: inline-block;"></div>
+		<div  class="Users" style="margin-top: 20px;width: 50% ; display: inline-block;"></div>
+
+	    <!-- <div class="panel panel-default Users">
+			<div class="panel-heading">
+				<h3 class="panel-title">User List</h3>
+			</div>
+			<div class="panel-body">
+			<div id="user_list">
+			<div class="row">
+				<div class="col-md-4">
+					<img src="images/user.jpg" class="img-thumbnail img-responsive">
+				</div>
+				<div class="col-md-8">
+					<h4><b>@zakounet</b></h4>
+					<button type="button" name="follow_button" class="btn btn-info action_button" onClick = "followUser(); "data-action="follow" data-sender_id="2620"><i class="glyphicon glyphicon-plus"></i> Follow</button>
+					<span class="label label-success"> 0 Followers</span>
+				</div>
+			</div>
+			<hr>
+			</div>
+			</div>
+			</div> -->
 	    </div>
 	<!-- <img th:src="@{'/user-photos/' + ${user.photos}}"/> -->
 	</div>
@@ -99,6 +121,7 @@
     if ( (localStorage.getItem('twitter_IsLoggedIn') == "true" ||  localStorage.getItem('twitter_IsLoggedIn') == true) && (getUrlVars()["email"] != undefined)) {
     	email = getUrlVars()["email"];
        	getTweets();
+       	followUser();
     } else {
       	  	window.open("login.html", "_self");
    
@@ -252,6 +275,70 @@
   });
 
     }
+   	  
+   	function followUser() {
+   	    var formData = {};
+   		$.ajax({
+   		    url : '/follow',
+   		    type : "GET",
+   		    headers: {
+   		      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+   		    },
+   		    success : function(result) {
+   		      console.log(result);
+   		   if (result.content != undefined) {
+   	   	      var contents = result.content;
+   	   	      for (var i = 0; i<contents.length; i++){
+   	   		  if(contents[i].username != null && contents[i].username != undefined && contents[i].username != email){
+   	   		     appendUser(contents[i].username);
+   	   	      }
+   	   		 
+   		   
+   	      }
+   		   }
+   		 
+   		    }   
+   	  });
+   		
+        
+
+   	    }
+   	function appendUser(result) {
+   		
+   		var html= '<div class="card" style="width: 100%;"><div class="card-body"><h5 class="card-title">'+result+'</h5> <button type="button" class="btn btn-primary" onclick="follow(\'' + result + '\')">Follow</button></div></div>';
+        $(".Users").append(html);
+   	}
+   	
+   	function follow(result) {
+   		console.log("aaya");
+   		console.log(result);
+   		if(result == null || result == undefined){
+   			return;
+   		}
+   		
+   	      var formData = {
+   	    
+   	    primaryUsername : email,
+   	    secondaryUsername : result
+   	  }
+   	  $.ajax({
+   	    url : '/following',
+   	    type : "POST",
+   	    headers: {
+   	      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+   	    },
+   	    data : JSON.stringify(formData),
+   	    contentType: "application/json; charset=utf-8",
+   	    success : function(result) {
+     	      console.log(result);
+   	    	if (result != undefined) {
+   	    		alert("Successfully followed the user");
+   	    	}
+   	    	
+   	      }
+   	         
+   	  });
+   	  }
     
     function appendTweetData(result) {
     if (result.photos != null ) {
