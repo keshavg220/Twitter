@@ -105,6 +105,11 @@ public class UserController {
 	    return userRepository.findByUsername(username);
 	 }
 	 
+	 @GetMapping("/userFollowerList/{username}")
+	 public List<following> getUserFollowerList(@PathVariable String username) {
+	    return followingRepository.findByPrimaryUsername(username);
+	 }
+	 
 	 
 	 @PostMapping("/following")
 	    public following createQuestion(@Valid @RequestBody following follow) {

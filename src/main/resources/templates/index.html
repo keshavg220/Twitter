@@ -255,20 +255,43 @@
     },
     success : function(result) {
       console.log(result);
-      if (result.content != undefined) {
-      var contents = result.content;
-      for (var i = 0; i<contents.length; i++){
-	  if(contents[i].password === null){
-	     appendTweetData(contents[i]);
-      }
-      else{
-      	continue;
-      }
-      
-   	
-      }
-      
-      }
+      $.ajax({
+    	    url : '/userFollowerList/' + email,
+    	    type : "GET",
+    	    headers: {
+    	      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
+    	    },
+    	    success : function(value) {
+    	      console.log(value);
+    	      if (result.content != undefined) {
+    	          var contents = result.content;
+    	          var values = value;
+    	          for (var i = 0; i<contents.length; i++){
+    	        	  if (contents[i].email == email) {
+	        			 appendTweetData(contents[i]);  
+    	        	  }
+    	        	  for(var j = 0; j < values.length; j++){
+    	        		  console.log("email : "+contents[i].email);
+    	        		  console.log("secondaryUsername : "+values[j].secondaryUsername);
+
+    	        		  if(contents[i].email == values[j].secondaryUsername ){
+    	        			     appendTweetData(contents[i]);
+    	        		      }
+    	        		  else{
+    	        		      	continue;
+    	        		      }
+    	        	  }
+    	    	  
+    	          
+    	          
+    	       	
+    	          }
+    	          }
+    	      }
+    	         
+    	  });
+
+    
      
       }
          
