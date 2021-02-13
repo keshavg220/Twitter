@@ -279,7 +279,7 @@
    	function followUser() {
    	    var formData = {};
    		$.ajax({
-   		    url : '/follow',
+   		    url : '/follow/'+email,
    		    type : "GET",
    		    headers: {
    		      'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')

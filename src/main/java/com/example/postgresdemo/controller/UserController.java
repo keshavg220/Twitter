@@ -1,11 +1,14 @@
 package com.example.postgresdemo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -67,9 +70,34 @@ public class UserController {
         return userRepository.save(newUser);
     }
 	
-	@GetMapping("/follow")
-    public Page<UserDao> getQuestions(Pageable pageable) {
-        return userRepository.findAll(pageable);
+	@GetMapping("/follow/{username}")
+    public Page<UserDao> getUsers(@PathVariable String username, Pageable pageable) {
+		 Page <UserDao> userList = userRepository.findAll(pageable);
+		 List <UserDao> userListContent = new ArrayList<>(userList.getContent());
+		 
+
+		 Page <following> userFollowList = followingRepository.findAll(pageable);
+		 List<following> userFollowListContent = userFollowList.getContent();
+		 for (int i =0 ; i<userFollowListContent.size(); i++) {
+			 System.out.println("userFollowListContent: "+i);
+			 following follwed =  userFollowListContent.get(i);
+			 System.out.println("userFollowListContent: "+follwed.getPrimaryUsername());
+			 System.out.println("username: "+username);
+			 if (follwed.getPrimaryUsername().trim().equalsIgnoreCase(username.trim())) {
+				 System.out.println(" follow username: "+username);
+				 String secondaryEmail = follwed.getSecondaryUsername();
+				 for (int k =0 ; k<userListContent.size(); k++) {
+					 UserDao user= userListContent.get(k);
+					 System.out.println("user: "+user.getUsername() +" secondaryEmail"+secondaryEmail);
+					 if (user.getUsername().trim().equalsIgnoreCase(secondaryEmail.trim())) {
+						 userListContent.remove(k);
+						 break;
+					 }
+				 }			 
+			 }
+		 }
+		 final Page<UserDao> page = new PageImpl<>(userListContent);
+        return page;
     }
 	
 	 @GetMapping("/loginCheck/{username}")

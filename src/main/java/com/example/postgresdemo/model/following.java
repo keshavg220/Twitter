@@ -6,9 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "following")
+@Table(name = "following", 
+uniqueConstraints= @UniqueConstraint(columnNames={"primaryUsername", "secondaryUsername"})
+)
+
 public class following extends AuditModel {
 	
 	@Id
@@ -21,10 +25,11 @@ public class following extends AuditModel {
 
     private Long id;
 	
-	
+
 	private String primaryUsername;
 	private String secondaryUsername;
 	
+
 	public Long getId() {
 		return id;
 	}
