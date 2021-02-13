@@ -118,8 +118,8 @@
   <script type="text/javascript">
         var email = "";
     $(function() {
-    if ( (localStorage.getItem('twitter_IsLoggedIn') == "true" ||  localStorage.getItem('twitter_IsLoggedIn') == true) && (getUrlVars()["email"] != undefined)) {
     	email = getUrlVars()["email"];
+    if ( (localStorage.getItem('twitter_IsLoggedIn') == "true" ||  localStorage.getItem('twitter_IsLoggedIn') == true) && (email != undefined) && (localStorage.getItem('twitter_loginBy') == email) ) {
        	getTweets();
        	followUser();
     } else {

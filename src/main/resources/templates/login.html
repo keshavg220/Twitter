@@ -66,7 +66,8 @@
     success : function(result) {
       console.log(result);
       if (result != undefined) {
-			localStorage.setItem('twitter_IsLoggedIn',true);  		    
+			localStorage.setItem('twitter_IsLoggedIn',true);
+			localStorage.setItem('twitter_loginBy',username);
 			authenticateRequest(formData);
       }
 		else{
