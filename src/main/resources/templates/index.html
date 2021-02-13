@@ -305,11 +305,11 @@
    	    }
    	function appendUser(result) {
    		
-   		var html= '<div class="card" style="width: 100%;"><div class="card-body"><h5 class="card-title">'+result+'</h5> <button type="button" class="btn btn-primary" onclick="follow(\'' + result + '\')">Follow</button></div></div>';
+   		var html= '<div class="card" style="width: 100%;"><div class="card-body"><h5 class="card-title">'+result+'</h5> <button type="button" class="btn btn-primary" onclick="follow(\'' + result + '\', this)">Follow</button></div></div>';
         $(".Users").append(html);
    	}
    	
-   	function follow(result) {
+   	function follow(result, el) {
    		console.log("aaya");
    		console.log(result);
    		if(result == null || result == undefined){
@@ -333,6 +333,7 @@
      	      console.log(result);
    	    	if (result != undefined) {
    	    		alert("Successfully followed the user");
+   	    		$(el).css("display", "none");
    	    	}
    	    	
    	      }
