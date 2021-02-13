@@ -61,7 +61,7 @@
 		    <div>
 		     
 		    <label>Photos: </label>
-		    <input type="file" name="image" accept="image/png, image/jpeg" id="imageFile" />
+		    <input type="file" name="image" accept="image/png, image/jpeg, video/mp4" id="imageFile" />
 		     
 		    </div>
 		
@@ -271,8 +271,6 @@
 	        			 appendTweetData(contents[i]);  
     	        	  }
     	        	  for(var j = 0; j < values.length; j++){
-    	        		  console.log("email : "+contents[i].email);
-    	        		  console.log("secondaryUsername : "+values[j].secondaryUsername);
 
     	        		  if(contents[i].email == values[j].secondaryUsername ){
     	        			     appendTweetData(contents[i]);
@@ -366,7 +364,12 @@
     
     function appendTweetData(result) {
     if (result.photos != null ) {
-      var html= '<div class="card" style="width: 100%;"><div class="card-body"><img src="'+result.photosImagePath+'"  style="width: 150px; height: 150px;" ></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
+    	var html ="";
+      if(result.photos.indexOf(".mp4") > -1){
+    	  html= '<div class="card" style="width: 100%;"><div class="card-body">    	  <video style="width: 250px; height: 250px;" controls>  <source src="'+result.photosImagePath+'"  type="video/mp4"></video></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
+      } else {
+          html= '<div class="card" style="width: 100%;"><div class="card-body"><img src="'+result.photosImagePath+'"  style="width: 150px; height: 150px;" ></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';  
+      }
       if (result.email == email) {
            $(".tweetsParticularEmailContainer").append(html);
       } else {
