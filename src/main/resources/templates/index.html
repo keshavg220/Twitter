@@ -173,7 +173,7 @@
     
                     var data = new FormData();
                     data.append("image", files[0]);
-                    
+                    data.append("email", email);
                                       $.ajax({
                         type: "POST",
                         enctype: 'multipart/form-data',
@@ -182,21 +182,23 @@
                         processData: false,
                         contentType: false,
                         cache: false,
-                        timeout: 600000,
                         headers: {
                           'Authorization': "Bearer "+localStorage.getItem('jwtTokenVal')
                         },
-                        success: function (data) {
-                            alert("success")
+                        success: function (result) {
+                            alert("success");
+                            $("#imageFile").val('');
+                            appendTweetData(result);
                         },
                         error: function (e) {
                             alert("ERROR : ", e);
                         }
                     });
+                    
+                                      
+                    
    }
 
-      
-    
     
     function repostTweet(idVal) {
     var formData = {};
@@ -366,7 +368,7 @@
     if (result.photos != null ) {
     	var html ="";
       if(result.photos.indexOf(".mp4") > -1){
-    	  html= '<div class="card" style="width: 100%;"><div class="card-body">    	  <video style="width: 250px; height: 250px;" controls>  <source src="'+result.photosImagePath+'"  type="video/mp4"></video></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
+    	  html= '<div class="card" style="width: 100%;"><div class="card-body">    	  <video style="width: 200px; height: 200px;" controls>  <source src="'+result.photosImagePath+'"  type="video/mp4"></video></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';
       } else {
           html= '<div class="card" style="width: 100%;"><div class="card-body"><img src="'+result.photosImagePath+'"  style="width: 150px; height: 150px;" ></div><div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><button  onclick="repostTweet('+result.id+')">RE-Post the Tweet</button><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div></div></div>';  
       }
